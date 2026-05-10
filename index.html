@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cheesebroth Hub</title>
+    <!-- Lucide Icons Library -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-color: #121214;
+            --card-bg: #1c1c1e;
+            --text-primary: #e0dcd0;
+            --text-secondary: #a09d94;
+            --accent: #c5a059;
+            --border: #2c2c2e;
+            --hover-border: #4a4a4d;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Helvetica Neue', 'Arial', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        h1 {
+            font-family: 'serif';
+            font-size: 2.5rem;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+        }
+
+        #project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 24px;
+            border-radius: 4px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .icon-box {
+            color: var(--accent);
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .card-description {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            min-height: 3em;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border);
+            padding-top: 12px;
+        }
+
+        .tag {
+            background: rgba(197, 160, 89, 0.1);
+            color: var(--accent);
+            padding: 2px 8px;
+            border-radius: 2px;
+            font-size: 0.7rem;
+        }
+
+        .loading {
+            text-align: center;
+            color: var(--text-secondary);
+            padding: 40px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 100px;
+            padding-bottom: 40px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            #project-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Cheesebroth Hub</h1>
+            <p class="subtitle">PROJECT ARCHIVES & REPOSITORY</p>
+        </header>
+
+        <div id="project-grid">
+            <div class="loading">Fetching projects from GitHub...</div>
+        </div>
+
+        <footer>
+            &copy; <span id="year"></span> Cheesebroth Studio. Designed for Midnight Creation.
+        </footer>
+    </div>
+
+    <script>
+        const USERNAME = 'cheesebroth-web';
+        const EXCLUDE_REPOS = ['home']; // ハブ自身は除外
+
+        async function fetchProjects() {
+            const grid = document.getElementById('project-grid');
+            try {
+                // GitHub APIからリポジトリ一覧を取得
+                const response = await fetch(`https://api.github.com/users/${USERNAME}/repos?sort=pushed&direction=desc`);
+                const repos = await response.json();
+
+                grid.innerHTML = ''; // ローディング表示を消去
+
+                repos.forEach(repo => {
+                    // GitHub Pagesが有効かつ除外リストにないものを表示
+                    if (repo.has_pages && !EXCLUDE_REPOS.includes(repo.name)) {
+                        const card = createCard(repo);
+                        grid.appendChild(card);
+                    }
+                });
+
+                // アイコンのレンダリング
+                lucide.createIcons();
+
+            } catch (error) {
+                console.error('Error fetching repos:', error);
+                grid.innerHTML = '<div class="loading">Failed to load projects.</div>';
+            }
+        }
+
+        function createCard(repo) {
+            const a = document.createElement('a');
+            a.className = 'card';
+            a.href = `https://${USERNAME}.github.io/${repo.name}/`;
+            a.target = '_blank';
+
+            // リポジトリ名からアイコンを推測
+            let iconName = 'folder';
+            const name = repo.name.toLowerCase();
+            const desc = (repo.description || '').toLowerCase();
+
+            if (name.includes('music') || name.includes('audio') || desc.includes('音') || desc.includes('曲')) iconName = 'music';
+            if (name.includes('tool') || name.includes('setting')) iconName = 'settings';
+            if (name.includes('code') || name.includes('dev')) iconName = 'code';
+            if (name.includes('note') || name.includes('memo')) iconName = 'file-text';
+            if (name.includes('vocal')) iconName = 'mic';
+
+            const lastUpdated = new Date(repo.pushed_at).toLocaleDateString('ja-JP');
+
+            a.innerHTML = `
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box"><i data-lucide="${iconName}"></i></div>
+                        <div class="card-title">${repo.name}</div>
+                    </div>
+                    <div class="card-description">${repo.description || 'No description available.'}</div>
+                </div>
+                <div class="card-footer">
+                    <span class="tag">${repo.language || 'Web'}</span>
+                    <span>Updated: ${lastUpdated}</span>
+                </div>
+            `;
+            return a;
+        }
+
+        document.getElementById('year').textContent = new Date().getFullYear();
+        fetchProjects();
+    </script>
+</body>
+</html>
