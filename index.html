@@ -3,252 +3,321 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cheesebroth Hub</title>
+    <title>プロジェクトアーカイブ｜ハブサイト</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hina+Mincho&family=Noto+Sans+JP:wght@400;600&display=swap" rel="stylesheet">
+    
     <script src="https://unpkg.com/lucide@latest"></script>
+    
     <style>
-        /* デザイン変数：濃紺と鮮やかなブルーを基調としたモダンデザイン 
+        /* デザイン変数：和モダン・ヴィンテージ 
+           提供画像(image_2.png)の配色を踏襲しています。
         */
         :root {
-            --bg-color: #0f172a;       /* 背景：深い濃紺 (Slate 900) */
-            --card-bg: #1e293b;        /* カード：少し明るい濃紺 (Slate 800) */
-            --text-primary: #f8fafc;   /* メインテキスト：クリーンな白 */
-            --text-secondary: #94a3b8; /* サブテキスト：落ち着いたグレー */
-            --accent: #3b82f6;         /* アクセント：モダンなブルー (Blue 500) */
-            --border: #334155;         /* ボーダー：馴染むグレー */
-            --hover-border: #60a5fa;   /* ホバー時：明るいブルー */
+            --bg-color: #121214;       /* 背景：温かみのある炭色 */
+            --card-bg: #1c1c1e;        /* カード背景：わずかに明るい炭色 */
+            --text-primary: #e0dcd0;   /* メインテキスト：和紙のような生成り色 */
+            --text-secondary: #a09d94; /* サブテキスト：落ち着いたグレー */
+            --accent: #c5a059;         /* アクセント：アンティークなゴールド（真鍮色） */
+            --border: #2c2c2e;         /* 境界線：炭色に馴染むグレー */
+            --hover-border: #4a4a4d;   /* ホバー時：少し明るいグレー */
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-primary);
-            /* モダンなゴシック系フォントに統一 */
-            font-family: 'Inter', 'Helvetica Neue', 'Arial', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            /* 明朝体をベースに、詳細はゴシック体に使い分け */
+            font-family: 'Hina Mincho', serif;
             margin: 0;
             padding: 0;
-            line-height: 1.6;
+            line-height: 1.8;
+            overflow-x: hidden;
         }
 
-        .container {
+        .hub-container {
             max-width: 900px;
             margin: 0 auto;
-            padding: 60px 20px;
+            padding: 100px 24px;
         }
 
+        /* ヘッダーエリア：提供画像(image_2.png)のデザインを再現 
+        */
         header {
             text-align: center;
-            margin-bottom: 80px;
+            margin-bottom: 120px;
         }
 
         h1 {
-            font-weight: 800;
-            font-size: 2.5rem;
-            letter-spacing: 0.1em;
+            font-size: 3.5rem;
             color: var(--text-primary);
-            margin-bottom: 10px;
+            margin-bottom: 20px;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
         }
 
-        /* タイトルの文字の一部を青くするモダンな装飾 */
-        h1 span {
-            color: var(--accent);
-        }
-
         .subtitle {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            letter-spacing: 0.05em;
+            color: var(--accent);
+            font-size: 1rem;
+            letter-spacing: 0.2em;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-weight: 400;
         }
 
-        #project-grid {
+        /* 自己紹介セクション：提供画像(image_2.png)のデザインを再現 
+        */
+        .profile-section {
+            margin-bottom: 80px;
+            border-left: 2px solid var(--accent); /* ゴールドの縦棒アクセント */
+            padding-left: 24px;
+        }
+
+        .profile-heading {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .profile-text {
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-weight: 400;
+        }
+
+        /* プロジェクト一覧セクション 
+        */
+        .project-section-heading {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            text-align: center;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-weight: 400;
+        }
+
+        /* プロジェクトグリッド */
+        .project-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 24px;
         }
 
-        .card {
+        /* プロジェクトカードのデザイン */
+        .project-card {
             background-color: var(--card-bg);
             border: 1px solid var(--border);
+            border-radius: 4px; /* ヴィンテージ感を出すために角は少し丸く */
             padding: 24px;
-            border-radius: 8px; /* 少し丸みを持たせてモダンに */
             text-decoration: none;
             color: inherit;
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            position: relative;
-            overflow: hidden;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            position: relative;
         }
 
-        .card:hover {
-            border-color: var(--hover-border);
+        /* ホバー時の真鍮のような発光エフェクト */
+        .project-card:hover {
             transform: translateY(-4px);
-            /* 青みがかったシャドウで発光感を演出 */
-            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.15);
+            border-color: var(--accent);
+            box-shadow: 0 10px 20px rgba(197, 160, 89, 0.15);
         }
 
-        .card-header {
-            display: flex;
-            align-items: center;
+        .card-top {
             margin-bottom: 16px;
         }
 
-        .icon-box {
+        .icon-wrapper {
             color: var(--accent);
             margin-right: 12px;
             display: flex;
             align-items: center;
-            background: rgba(59, 130, 246, 0.1); /* アイコンの背景に薄い青 */
+            background: rgba(197, 160, 89, 0.08); /* アイコンの背景に薄いゴールド */
             padding: 8px;
-            border-radius: 6px;
+            border-radius: 4px;
         }
 
-        .card-title {
-            font-size: 1.2rem;
+        .project-name {
+            font-size: 1.3rem;
             font-weight: 700;
             color: var(--text-primary);
+            font-family: 'Hina Mincho', serif;
         }
 
-        .card-description {
-            font-size: 0.85rem;
+        .project-desc {
+            font-size: 0.875rem;
             color: var(--text-secondary);
+            font-family: 'Noto Sans JP', sans-serif;
+            font-weight: 400;
+            margin-top: 12px;
             margin-bottom: 20px;
             min-height: 3em;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
-        .card-footer {
+        /* カード下部のステータスバー */
+        .card-meta {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
             font-size: 0.75rem;
             color: var(--text-secondary);
-            border-top: 1px solid var(--border);
-            padding-top: 12px;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-weight: 400;
         }
 
-        .tag {
-            background: rgba(59, 130, 246, 0.15);
-            color: var(--hover-border);
-            padding: 4px 10px;
-            border-radius: 20px; /* ピル型のタグでモダンに */
+        .language-tag {
+            background: rgba(197, 160, 89, 0.1);
+            color: var(--accent);
+            padding: 2px 8px;
+            border-radius: 2px;
             font-weight: 600;
         }
 
-        .loading {
+        /* ローディングアニメーション */
+        .loader {
+            grid-column: 1 / -1;
             text-align: center;
+            padding: 80px 0;
             color: var(--accent);
-            padding: 40px;
+            font-family: 'Noto Sans JP', sans-serif;
             font-weight: 600;
         }
 
         footer {
+            margin-top: 120px;
             text-align: center;
-            margin-top: 100px;
-            padding-bottom: 40px;
             font-size: 0.8rem;
             color: var(--text-secondary);
             opacity: 0.6;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-weight: 400;
         }
 
         /* レスポンシブ対応 */
-        @media (max-width: 600px) {
-            h1 { font-size: 1.8rem; }
-            #project-grid { grid-template-columns: 1fr; }
+        @media (max-width: 768px) {
+            .hub-container { padding: 60px 20px; }
+            h1 { font-size: 2.5rem; }
+            .project-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <div class="hub-container">
         <header>
-            <h1>CHEESEBROTH <span>HUB</span></h1>
-            <p class="subtitle">PROJECT ARCHIVES & REPOSITORY</p>
+            <h1>ちーずの処</h1>
+            <p class="subtitle">CHEESE HUB</p>
         </header>
 
-        <div id="project-grid">
-            <div class="loading">Loading projects...</div>
-        </div>
+        <section class="profile-section">
+            <h2 class="profile-heading">自己紹介</h2>
+            <p class="profile-text">今のところ何もしていません。 ただ、穏やかに生きています。</p>
+        </section>
+
+        <section>
+            <h2 class="project-section-heading">プロジェクト一覧</h2>
+            <main id="project-list" class="project-grid">
+                <div class="loader">プロジェクトを同期中...</div>
+            </main>
+        </section>
 
         <footer>
-            &copy; <span id="year"></span> Cheesebroth Studio.
+            &copy; <span id="year"></span> Cheesebroth Studio. Designed for Midnight Creation.
         </footer>
     </div>
 
     <script>
-        const USERNAME = 'cheesebroth-web';
+        // 設定
+        const GITHUB_USER = 'cheesebroth-web';
         
-        // ハブ自身を除外するためのリスト（すべて小文字で記述）
-        const EXCLUDE_REPOS = ['home', 'hub', 'cheesebroth-web.github.io'];
+        // ハブ自身を除外するためのリスト（すべて小文字で記述。大文字・小文字を問わず除外されます。）
+        const IGNORE_REPOS = ['home', 'hub', 'cheesebroth-web.github.io'];
 
-        async function fetchProjects() {
-            const grid = document.getElementById('project-grid');
+        // プロジェクトの自動取得処理
+        async function fetchGitHubProjects() {
+            const container = document.getElementById('project-list');
+            
             try {
-                // GitHub APIから更新順に取得
-                const response = await fetch(`https://api.github.com/users/${USERNAME}/repos?sort=pushed&direction=desc`);
+                // pushed_at（更新順）で取得
+                const response = await fetch(`https://api.github.com/users/${GITHUB_USER}/repos?sort=pushed&direction=desc`);
                 const repos = await response.json();
 
-                grid.innerHTML = ''; // ローディング表示を消去
+                container.innerHTML = ''; // ローダーを消去
 
                 repos.forEach(repo => {
                     const repoNameLower = repo.name.toLowerCase();
                     
-                    // GitHub Pagesが有効 かつ 除外リストに含まれていない場合のみ表示
-                    if (repo.has_pages && !EXCLUDE_REPOS.includes(repoNameLower)) {
-                        const card = createCard(repo);
-                        grid.appendChild(card);
+                    // 条件：GitHub Pagesが有効で、かつ除外リストに含まれていない
+                    if (repo.has_pages && !IGNORE_REPOS.includes(repoNameLower)) {
+                        const card = createProjectCard(repo);
+                        container.appendChild(card);
                     }
                 });
 
-                // アイコンの描画
+                // Lucideアイコンを実行
                 lucide.createIcons();
 
             } catch (error) {
-                console.error('Error fetching repos:', error);
-                grid.innerHTML = '<div class="loading" style="color: #ef4444;">Failed to load projects.</div>';
+                console.error('データの取得に失敗しました:', error);
+                container.innerHTML = '<div class="loader" style="color: #ef4444;">読み込みに失敗しました。リロードしてください。</div>';
             }
         }
 
-        function createCard(repo) {
-            const a = document.createElement('a');
-            a.className = 'card';
-            a.href = `https://${USERNAME}.github.io/${repo.name}/`;
-            a.target = '_blank';
+        // カードのHTML要素を生成
+        function createProjectCard(repo) {
+            const card = document.createElement('a');
+            card.className = 'project-card';
+            // 公開URLの構築
+            card.href = `https://${GITHUB_USER}.github.io/${repo.name}/`;
+            card.target = '_blank';
 
-            // アイコンの自動判定
-            let iconName = 'folder';
+            // リポジトリ名からアイコンを自動判別
+            let iconType = 'folder';
             const name = repo.name.toLowerCase();
-            const desc = (repo.description || '').toLowerCase();
+            const desc = (repo.description || "").toLowerCase();
 
-            if (name.includes('music') || name.includes('audio') || desc.includes('音') || desc.includes('曲')) iconName = 'music';
-            else if (name.includes('game') || desc.includes('ゲーム')) iconName = 'gamepad-2'; // ゲーム用のアイコンを追加
-            else if (name.includes('tool') || name.includes('setting')) iconName = 'settings';
-            else if (name.includes('code') || name.includes('dev')) iconName = 'code';
-            else if (name.includes('note') || name.includes('memo')) iconName = 'file-text';
-            else if (name.includes('vocal')) iconName = 'mic';
+            if (name.includes('music') || name.includes('audio') || desc.includes('音') || desc.includes('曲')) iconType = 'music';
+            else if (name.includes('game') || desc.includes('ゲーム')) iconType = 'gamepad-2'; // ゲーム用のアイコン
+            else if (name.includes('vocal') || desc.includes('声')) iconType = 'mic';
+            else if (name.includes('tool') || name.includes('dev')) iconType = 'cpu';
+            else if (name.includes('note') || desc.includes('メモ')) iconType = 'book-open';
+            else if (name.includes('setting') || name.includes('config')) iconType = 'settings';
 
-            // 日付フォーマット
-            const lastUpdated = new Date(repo.pushed_at).toLocaleDateString('ja-JP');
-            const description = repo.description || '説明が設定されていません。';
-            const language = repo.language || 'Web';
+            // 日付のフォーマット (例: 2026/05/11)
+            const date = new Date(repo.pushed_at).toLocaleDateString('ja-JP');
 
-            a.innerHTML = `
-                <div>
-                    <div class="card-header">
-                        <div class="icon-box"><i data-lucide="${iconName}"></i></div>
-                        <div class="card-title">${repo.name}</div>
+            card.innerHTML = `
+                <div class="card-top">
+                    <div style="display: flex; align-items: center; margin-bottom: 16px;">
+                        <div class="icon-wrapper">
+                            <i data-lucide="${iconType}"></i>
+                        </div>
+                        <div class="project-name">${repo.name}</div>
                     </div>
-                    <div class="card-description">${description}</div>
+                    <div class="project-desc">${repo.description || "説明はありません。"}</div>
                 </div>
-                <div class="card-footer">
-                    <span class="tag">${language}</span>
-                    <span>Updated: ${lastUpdated}</span>
+                <div class="card-meta">
+                    <span class="language-tag">${repo.language || "Web"}</span>
+                    <span>Updated: ${date}</span>
                 </div>
             `;
-            return a;
+
+            return card;
         }
 
+        // 初期化
         document.getElementById('year').textContent = new Date().getFullYear();
-        fetchProjects();
+        fetchGitHubProjects();
     </script>
 </body>
 </html>
